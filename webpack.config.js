@@ -1,4 +1,3 @@
-
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlPlugin = require('html-webpack-plugin')
 var path = require('path')
@@ -49,9 +48,9 @@ module.exports = {
                 }
             }, {
                 test: /.scss$/,
-                loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + "&" +
-                    "includePaths[]=" + (path.resolve(ROOT_PATH, "bower_components")) + "&" +
-                    "includePaths[]=" + (path.resolve(ROOT_PATH, "node_modules"))
+                loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + '&' +
+                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'bower_components')) + '&' +
+                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'node_modules'))
                 )
             },
 
@@ -109,7 +108,7 @@ module.exports = {
 
     devServer: {
         colors: true,
-        contentBase: "./build",
+        contentBase: './build',
         https: false,
         host: '0.0.0.0',
         port: 7001,

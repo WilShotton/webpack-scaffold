@@ -1,23 +1,20 @@
 var path = require('path')
 var webpackConfig = require('./webpack.config.js')
 
-var ROOT = path.resolve(__dirname)
+
+var ROOT_PATH = path.resolve(__dirname)
 
 webpackConfig.cache = true
 
 webpackConfig.module.preLoaders = [{
     test: /\.jsx?$/,
-    loaders: ['isparta', 'eslint-loader'],
-    include: path.resolve(ROOT, 'src')
+    loaders: ['isparta', 'eslint'],
+    include: path.resolve(ROOT_PATH, 'src')
 }]
 
 module.exports = function(config) {
 
-
     config.set({
-
-        // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: ROOT,
 
         browsers: ['Chrome'],
 
@@ -37,27 +34,34 @@ module.exports = function(config) {
                     type: 'text-summary'
                 }, {
                     type: 'html',
-                    dir: './docs/coverage'
+                    dir: 'docs/coverage'
                 }
             ]
         },
 
         singleRun: false,
 
-        webpack: webpackConfig,
+        webpack: {
+            node : {
+                fs: 'empty'
+            },
+
+            module: {
+                preLoaders: [{
+                    test: /\.jsx?$/,
+                    loaders: ['isparta', 'eslint'],
+                    include: path.resolve(ROOT_PATH, 'src')
+                }],
+                loaders: [{
+                    test: /\.jsx?$/,
+                    loader: 'babel',
+                    include: path.resolve(ROOT_PATH, 'src')
+                }]
+            }
+        },
 
         webpackMiddleware: {
             noInfo: true
-        },
-
-        autoWatch: true,
-
-        plugins: [
-            require('../node_modules/karma-mocha'),
-            require('../node_modules/karma-mocha-reporter'),
-            require('../node_modules/karma-coverage'),
-            require('../node_modules/karma-webpack'),
-            require('../node_modules/karma-chrome-launcher')
-        ]
+        }
     })
 }

@@ -1,8 +1,12 @@
+var chai = require('chai')
+var assert = require('assert')
+
 
 describe('Sample', () => {
 
     it('should pass', () => {
 
-        expect(1).toEqual(1)
+        chai.expect(1).to.equal(1)
+        assert.equal(1, 1)
     })
 })
