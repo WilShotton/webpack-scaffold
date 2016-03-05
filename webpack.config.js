@@ -11,6 +11,7 @@ var extractCSS = new ExtractTextPlugin('styles.css', {
 })
 
 var htmlPlugin = new HtmlPlugin({
+    favicon: './src/assets/favicon.ico',
     title: 'Scaffold'
 })
 
