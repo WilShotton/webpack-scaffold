@@ -10,6 +10,10 @@ var extractCSS = new ExtractTextPlugin('styles.css', {
     allChunks: true
 })
 
+var extractBootstrapCSS = new ExtractTextPlugin('bootstrap.css', {
+    allChunks: true
+})
+
 var htmlPlugin = new HtmlPlugin({
     favicon: './src/assets/favicon.ico',
     title: 'Scaffold'
@@ -48,11 +52,13 @@ module.exports = {
                     plugins: ['transform-class-properties']
                 }
             }, {
-                test: /.scss$/,
+                test: /\.scss$/,
                 loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + '&' +
-                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'bower_components')) + '&' +
                     'includePaths[]=' + (path.resolve(ROOT_PATH, 'node_modules'))
                 )
+            }, {
+                test: /\.css$/,
+                loader: extractCSS.extract('style', 'css!postcss')
             },
 
             // Images
