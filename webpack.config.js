@@ -50,7 +50,6 @@ module.exports = {
             }, {
                 test: /.scss$/,
                 loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + '&' +
-                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'bower_components')) + '&' +
                     'includePaths[]=' + (path.resolve(ROOT_PATH, 'node_modules'))
                 )
             },
