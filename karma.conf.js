@@ -8,9 +8,13 @@ webpackConfig.cache = true
 
 webpackConfig.module.preLoaders = [{
     test: /\.jsx?$/,
-    loaders: ['isparta', 'eslint'],
+    loaders: ['isparta-loader', 'eslint-loader'],
     include: path.resolve(ROOT_PATH, 'src')
 }]
+
+webpackConfig.node = {
+    fs: 'empty'
+}
 
 module.exports = function(config) {
 
@@ -41,24 +45,7 @@ module.exports = function(config) {
 
         singleRun: false,
 
-        webpack: {
-            node : {
-                fs: 'empty'
-            },
-
-            module: {
-                preLoaders: [{
-                    test: /\.jsx?$/,
-                    loaders: ['isparta', 'eslint'],
-                    include: path.resolve(ROOT_PATH, 'src')
-                }],
-                loaders: [{
-                    test: /\.jsx?$/,
-                    loader: 'babel',
-                    include: path.resolve(ROOT_PATH, 'src')
-                }]
-            }
-        },
+        webpack: webpackConfig,
 
         webpackMiddleware: {
             noInfo: true
