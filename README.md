@@ -2,8 +2,12 @@
 
 A project scaffold using Webpack and Babel with React, RxJS and Immutable.
 
-Start webpack server ```npm run local```
+Start webpack server ```npm start```
 
-Start karma ```npm run test```
+Start karma ```npm test```
 
-Build project ```webpack```
+Dev build ```npm run dev``` or ```webpack```
+
+Production build ```npm run prod```
+
+Production server ```npm run prod-server```

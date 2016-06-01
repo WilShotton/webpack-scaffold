@@ -102,7 +102,11 @@ module.exports = {
         require('autoprefixer-core')
     ],
 
-    plugins: [extractCSS, htmlPlugin, oldWatchingPlugin],
+    plugins: [
+        extractCSS,
+        htmlPlugin,
+        oldWatchingPlugin
+    ],
 
     devtool: 'source-map',
 
