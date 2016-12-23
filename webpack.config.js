@@ -1,114 +1,86 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var HtmlPlugin = require('html-webpack-plugin')
-var path = require('path')
-var webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+const path = require('path')
 
+const paths = {
 
-var ROOT_PATH = path.resolve(__dirname)
+    sassVars: path.resolve(__dirname, './src/styles/config.json'),
+    src: path.resolve(__dirname, 'src')
+}
 
-var extractCSS = new ExtractTextPlugin('styles.css', {
-    allChunks: true
-})
-
-var htmlPlugin = new HtmlPlugin({
-    favicon: './src/assets/favicon.ico',
-    title: 'Scaffold'
-})
-
-var oldWatchingPlugin = new webpack.OldWatchingPlugin()
-
-var sassVars = path.resolve(ROOT_PATH, './src/styles/config.json');
+const nodeEnv = process.env.NODE_ENV || 'development'
+const isProd = nodeEnv === 'production'
 
 module.exports = {
 
-    entry: [
-        path.resolve(ROOT_PATH, 'src/main.jsx')
-    ],
+    context: __dirname,
+
+    entry: {
+        main: './src/main.jsx'
+    },
 
     output: {
-        path: 'build',
+        path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
 
+    resolveLoader: {
+        alias: {
+            'jstosass-loader': path.join(__dirname, './js-to-sass-loader.jsx')
+        }
+    },
+
     module: {
-        loaders: [
+
+        rules: [
             {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }, {
-                test: /\.json$/,
-                loader: 'json-loader'
-            }, {
-                test: /\.jsx$/,
-                loader: 'babel-loader',
-                include: path.resolve(ROOT_PATH, 'src'),
-                query: {
-                    cacheDirectory: true,
-                    presets: ['es2015', 'react'],
-                    plugins: ['transform-class-properties']
-                }
+                test: /\.jsx?$/,
+                include: paths.src,
+                use: ['babel-loader']
             }, {
                 test: /.scss$/,
-                loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + '&' +
-                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'node_modules'))
-                )
-            },
-
-            // Images
-            {
-                test: /\.gif$/,
-                loader: 'url-loader?limit=10000&mimetype=image/gif'
-            }, {
-                test: /\.jpg$/,
-                loader: 'url-loader?limit=10000&mimetype=image/jpg'
-            }, {
-                test: /\.png$/,
-                loader: 'url-loader?limit=10000&mimetype=image/png'
-            },
-
-            // Fonts
-            {
-                test: /\.woff(\?43278770)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=assets/[name].[ext]'
-            }, {
-                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=assets/[name].[ext]'
-            }, {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=assets/[name].[ext]'
-            }, {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=assets/[name].[ext]'
-            }, {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=assets/[name].[ext]'
-            }
-        ],
-
-        preLoaders: [
-            {
-                test: /\.jsx$/,
-                loader: 'eslint-loader',
-                include: path.resolve(ROOT_PATH, 'src')
+                include: paths.src,
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: [
+                        {
+                            loader: 'css-loader'
+                        }, {
+                            loader: 'postcss-loader'
+                        }, {
+                            loader: 'sass-loader'
+                        }, {
+                            loader: 'jstosass-loader'
+                        }
+                    ]
+                })
             }
         ]
     },
 
-    sassLoader: {
-        precision: 10
-    },
-
-    postcss: [
-        require('autoprefixer-core')
-    ],
-
     plugins: [
-        extractCSS,
-        htmlPlugin,
-        oldWatchingPlugin
-    ],
 
-    devtool: 'source-map',
+        new ExtractTextPlugin({
+            filename: 'styles.css',
+            allChunks: true,
+        }),
+
+        new HtmlWebpackPlugin({
+            favicon: './src/assets/favicon.ico',
+            title: 'Scaffold'
+        }),
+
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                postcss: [require('autoprefixer')],
+                jsToSass: {
+                    foo: 'foo'
+                }
+            }
+        })
+    ],
 
     devServer: {
         colors: true,
