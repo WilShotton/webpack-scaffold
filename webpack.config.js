@@ -5,7 +5,7 @@ const path = require('path')
 
 const paths = {
 
-    sassVars: path.resolve(__dirname, './src/styles/config.json'),
+    sassVars: path.resolve(__dirname, './src/styles/config.jsx'),
     src: path.resolve(__dirname, 'src')
 }
 
@@ -76,7 +76,7 @@ module.exports = {
                 context: __dirname,
                 postcss: [require('autoprefixer')],
                 jsToSass: {
-                    foo: 'foo'
+                    path: paths.sassVars
                 }
             }
         })
