@@ -3,6 +3,10 @@
   "version": "0.2.1",
   "description": "An ES6, React, Webpack scaffold",
   "author": "Wil Shotton",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WilShotton/webpack-scaffold.git"
+  },
   "main": "src/main.jsx",
   "scripts": {
     "start": "webpack-dev-server",
