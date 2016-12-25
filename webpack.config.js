@@ -25,12 +25,6 @@ module.exports = {
         filename: 'bundle.js'
     },
 
-    resolveLoader: {
-        alias: {
-            'jstosass-loader': path.join(__dirname, './js-to-sass-loader.jsx')
-        }
-    },
-
     module: {
 
         rules: [
@@ -51,7 +45,7 @@ module.exports = {
                         }, {
                             loader: 'sass-loader'
                         }, {
-                            loader: 'jstosass-loader'
+                            loader: 'js-sass-loader'
                         }
                     ]
                 })
