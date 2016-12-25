@@ -31,7 +31,25 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 include: paths.src,
-                use: ['babel-loader']
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        plugins: [
+                            'transform-class-properties'
+                        ],
+                        presets: [
+                            ['es2015', {modules: false}],
+                            'react'
+                        ],
+                        env: {
+                            'development': {
+                                'presets': [
+                                    'react-hmre'
+                                ]
+                            }
+                        }
+                    }
+                }],
             }, {
                 test: /.scss$/,
                 include: paths.src,
