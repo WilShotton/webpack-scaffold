@@ -95,23 +95,7 @@ module.exports = {
     ],
 
     devServer: {
-        colors: true,
-        contentBase: './build',
-        https: false,
-        host: '0.0.0.0',
-        port: 7001,
-        filename: 'main.js',
-        hot: false,
-        progress: true,
-        stats: {
-            assets: false,
-            colors: true,
-            version: false,
-            hash: false,
-            timings: false,
-            chunks: false,
-            chunkModules: false,
-            children: false
-        }
+        contentBase: path.join(__dirname, 'build'),
+        port: 7001
     }
 }
