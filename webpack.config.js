@@ -94,6 +94,8 @@ module.exports = {
         })
     ],
 
+    devtool: 'source-map',
+
     devServer: {
         contentBase: path.join(__dirname, 'build'),
         port: 7001
