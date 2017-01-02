@@ -25,6 +25,10 @@ module.exports = {
         filename: 'bundle.js'
     },
 
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+
     module: {
 
         rules: [
@@ -35,6 +39,8 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         plugins: [
+                            'transform-decorators-legacy',
+                            'transform-decorators',
                             'transform-class-properties'
                         ],
                         presets: [
