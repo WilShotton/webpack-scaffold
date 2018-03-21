@@ -1,13 +1,7 @@
 # Webpack Scaffold
 
-A project scaffold using Webpack and Babel with React, RxJS and Immutable.
+A project scaffold using Webpack4, Jest, eslint, modular SASS and React.
 
-Start webpack server ```npm start```
+Start webpack server ```yarn start```
 
-Start karma ```npm test```
-
-Dev build ```npm run dev``` or ```webpack```
-
-Production build ```npm run prod```
-
-Production server ```npm run prod-server```
+Start tests ```yarn test```

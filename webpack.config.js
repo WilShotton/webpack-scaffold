@@ -1,133 +1,62 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var HtmlPlugin = require('html-webpack-plugin')
-var path = require('path')
-var webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-
-var ROOT_PATH = path.resolve(__dirname)
-
-var extractCSS = new ExtractTextPlugin('styles.css', {
-    allChunks: true
-})
-
-var htmlPlugin = new HtmlPlugin({
-    favicon: './src/assets/favicon.ico',
-    title: 'Scaffold'
-})
-
-var oldWatchingPlugin = new webpack.OldWatchingPlugin()
-
-var sassVars = path.resolve(ROOT_PATH, './src/styles/config.json');
 
 module.exports = {
 
-    entry: [
-        path.resolve(ROOT_PATH, 'src/main.jsx')
-    ],
-
-    output: {
-        path: 'build',
-        filename: 'bundle.js'
-    },
-
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }, {
-                test: /\.json$/,
-                loader: 'json-loader'
-            }, {
-                test: /\.jsx$/,
-                loader: 'babel-loader',
-                include: path.resolve(ROOT_PATH, 'src'),
-                query: {
-                    cacheDirectory: true,
-                    presets: ['es2015', 'react'],
-                    plugins: ['transform-class-properties']
+                exclude: /node_modules/,
+                test: /\.js$/,
+                use: {
+                    loader: 'babel-loader'
                 }
             }, {
-                test: /.scss$/,
-                loader: extractCSS.extract('style', 'css!postcss!sass!jsontosass?path='+ sassVars + '&' +
-                    'includePaths[]=' + (path.resolve(ROOT_PATH, 'node_modules'))
-                )
-            },
-
-            // Images
-            {
-                test: /\.gif$/,
-                loader: 'url-loader?limit=10000&mimetype=image/gif'
+                test: /\.html$/,
+                use: {
+                    loader: 'html-loader',
+                    options: {minimize: true}
+                }
             }, {
-                test: /\.jpg$/,
-                loader: 'url-loader?limit=10000&mimetype=image/jpg'
+                loader: ExtractTextPlugin.extract({
+                    fallback: require.resolve('style-loader'),
+                    use: [
+                        {
+                            loader: require.resolve('css-loader'),
+                            options: {
+                                camelCase: true,
+                                context: __dirname,
+                                localIdentName: '[name]__[local]__[hash:base64:5]',
+                                minimize: true,
+                                modules: true
+                            }
+                        }, {
+                            loader: require.resolve('postcss-loader'),
+                            options: {
+                                plugins: [
+                                    require('autoprefixer')
+                                ]
+                            }
+                        },
+                        require.resolve('sass-loader')
+                    ]
+                }),
+                test: /\.mod\.scss$/
             }, {
-                test: /\.png$/,
-                loader: 'url-loader?limit=10000&mimetype=image/png'
-            },
-
-            // Fonts
-            {
-                test: /\.woff(\?43278770)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=assets/[name].[ext]'
-            }, {
-                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=assets/[name].[ext]'
-            }, {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=assets/[name].[ext]'
-            }, {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=assets/[name].[ext]'
-            }, {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=assets/[name].[ext]'
-            }
-        ],
-
-        preLoaders: [
-            {
-                test: /\.jsx$/,
-                loader: 'eslint-loader',
-                include: path.resolve(ROOT_PATH, 'src')
+                loader: require.resolve('ignore-loader'),
+                test: /\.spec\.js$/
             }
         ]
     },
 
-    sassLoader: {
-        precision: 10
-    },
-
-    postcss: [
-        require('autoprefixer-core')
-    ],
-
     plugins: [
-        extractCSS,
-        htmlPlugin,
-        oldWatchingPlugin
-    ],
-
-    devtool: 'source-map',
-
-    devServer: {
-        colors: true,
-        contentBase: './build',
-        https: false,
-        host: '0.0.0.0',
-        port: 7001,
-        filename: 'main.js',
-        hot: false,
-        progress: true,
-        stats: {
-            assets: false,
-            colors: true,
-            version: false,
-            hash: false,
-            timings: false,
-            chunks: false,
-            chunkModules: false,
-            children: false
-        }
-    }
+        new ExtractTextPlugin({
+            filename: `style.[hash].css`
+        }),
+        new HtmlWebpackPlugin({
+            filename: './index.html',
+            template: './src/index.html'
+        })
+    ]
 }
